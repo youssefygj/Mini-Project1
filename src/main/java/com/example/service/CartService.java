@@ -24,32 +24,31 @@ public class CartService extends MainService<Cart> {
         return cartRepository.addCart(cart);
     }
 
-
+    
     public ArrayList<Cart> getCarts() {
         return cartRepository.getCarts();
     }
 
-
+   
     public Cart getCartById(UUID cartId) {
         return cartRepository.getCartById(cartId);
     }
 
-
+   
     public Cart getCartByUserId(UUID userId) {
         return cartRepository.getCartByUserId(userId);
     }
 
-
+   
     public void addProductToCart(UUID cartId, Product product) {
         cartRepository.addProductToCart(cartId, product);
     }
 
-
+    
     public void deleteProductFromCart(UUID cartId, Product product) {
         cartRepository.deleteProductFromCart(cartId, product);
     }
 
-    
     public void deleteCartById(UUID cartId) {
         cartRepository.deleteCartById(cartId);
     }
