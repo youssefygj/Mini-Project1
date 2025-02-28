@@ -50,13 +50,8 @@ public abstract class MainRepository<T> {
         saveAll(allData);
     }
 
-
-
     public void overrideData(ArrayList<T> data) {
         saveAll(data);
     }
-
-    
-
 
 }
