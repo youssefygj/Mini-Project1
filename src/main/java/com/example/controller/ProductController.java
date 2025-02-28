@@ -34,7 +34,21 @@ public class ProductController {
 
     @PutMapping("/update/{productId}")
     public Product updateProduct(@PathVariable UUID productId, @RequestBody Map<String,Object> body) {
-        return this.productService.updateProduct(productId, (String) body.get("name"), (double) body.get("price"));
+        String newName = (body.containsKey("newName")) ? (String) body.get("newName") : null;
+        if (newName != null && newName.isBlank()) {
+            throw new IllegalArgumentException("Name cannot be blank");
+        }
+        double newPrice = 0;
+        if (body.containsKey("newPrice")) {
+            if(body.get("newPrice") instanceof Double) {
+                newPrice = (double) body.get("newPrice");
+            } else {
+                throw new IllegalArgumentException("Price must be a valid number");
+            }
+        } else {
+            throw new IllegalArgumentException("Price must be provided");
+        }
+        return this.productService.updateProduct(productId, newName, newPrice);
     }
 
     @PutMapping("/applyDiscount")
