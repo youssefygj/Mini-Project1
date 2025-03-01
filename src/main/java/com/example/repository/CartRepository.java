@@ -32,21 +32,13 @@ public class CartRepository extends MainRepository<Cart>{
 
 
     public Cart addCart(Cart cart) {
-        try {
-            objectMapper.writeValue(new File(getDataPath()), cart);
-            return cart;
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to write to JSON file", e);
-        }
+        this.save(cart);
+        return cart;
     }
 
 
     public ArrayList<Cart> getCarts() {
-        try {
-            return objectMapper.readValue(new File(getDataPath()), new TypeReference<ArrayList<Cart>>(){});
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read from JSON file", e);
-        }
+        return this.findAll();
     }
 
 
@@ -75,21 +67,31 @@ public class CartRepository extends MainRepository<Cart>{
 
 
     public void addProductToCart(UUID cartId, Product product) {
-        Objects.requireNonNull(this.findAll().stream()
-                .filter(cart -> cart.getId().equals(cartId))
-                .findFirst().orElse(null)).getProducts().add(product);
+        ArrayList<Cart> carts = this.findAll();
+        Cart cart = Objects.requireNonNull(carts.stream()
+                .filter(c -> c.getId().equals(cartId))
+                .findFirst().orElse(null));
+        cart.getProducts().add(product);
+
+        this.overrideData(carts);
     }
 
 
     public void deleteProductFromCart(UUID cartId, Product product) {
-        Objects.requireNonNull(this.findAll().stream()
-                .filter(cart -> cart.getId().equals(cartId))
-                .findFirst().orElse(null)).getProducts().remove(product);
+        ArrayList<Cart> carts = this.findAll();
+        Cart cart = Objects.requireNonNull(carts.stream()
+                .filter(c -> c.getId().equals(cartId))
+                .findFirst().orElse(null));
+        cart.getProducts().remove(product);
+
+        this.overrideData(carts);
     }
 
 
     public void deleteCartById(UUID cartId) {
-        this.findAll().removeIf(cart -> cart.getId().equals(cartId));
+        ArrayList<Cart> carts = this.findAll();
+        carts.removeIf(cart -> cart.getId().equals(cartId));
+        this.overrideData(carts);
     }
 
 }
