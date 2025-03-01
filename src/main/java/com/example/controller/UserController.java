@@ -13,8 +13,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-//The Dependency Injection Variables
-//The Constructor with the requried variables mapping the Dependency Injection.
+
     private final UserService userService;
 
     @Autowired
