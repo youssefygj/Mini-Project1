@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -52,8 +53,12 @@ public class UserService extends MainService<User> {
         Order newOrder = new Order();
         Cart cart = cartService.getCartByUserId(userId);
         if (cart == null) throw new ResourceNotFoundException("Cart not found, likely User doesn't exist");
-        newOrder.setProducts(cart.getProducts());//TODO Check for deep cloning issues
-        emptyCart(userId);
+
+        for(Product product : cart.getProducts()){
+            newOrder.setTotalPrice(newOrder.getTotalPrice() + product.getPrice());
+            newOrder.getProducts().add(product);
+            cartService.deleteProductFromCart(cart.getId(), product);
+        }
 
         userRepository.addOrderToUser(userId, newOrder);
         orderService.addOrder(newOrder);
