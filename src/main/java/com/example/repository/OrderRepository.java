@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 @Repository
 @SuppressWarnings("rawtypes")
-
 public class OrderRepository extends MainRepository<Order>{
 
     @Value("${spring.application.cartDataPath}")

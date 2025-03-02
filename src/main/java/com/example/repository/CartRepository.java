@@ -36,11 +36,9 @@ public class CartRepository extends MainRepository<Cart>{
         return cart;
     }
 
-
     public ArrayList<Cart> getCarts() {
         return this.findAll();
     }
-
 
     public Cart getCartById(UUID cartId) {
         try {
@@ -53,7 +51,6 @@ public class CartRepository extends MainRepository<Cart>{
         }
     }
 
-
     public Cart getCartByUserId(UUID userId) {
         try {
             return this.findAll().stream()
@@ -65,7 +62,6 @@ public class CartRepository extends MainRepository<Cart>{
         }
     }
 
-
     public void addProductToCart(UUID cartId, Product product) {
         ArrayList<Cart> carts = this.findAll();
         Cart cart = Objects.requireNonNull(carts.stream()
@@ -76,7 +72,6 @@ public class CartRepository extends MainRepository<Cart>{
         this.overrideData(carts);
     }
 
-
     public void deleteProductFromCart(UUID cartId, Product product) {
         ArrayList<Cart> carts = this.findAll();
         Cart cart = Objects.requireNonNull(carts.stream()
@@ -86,7 +81,6 @@ public class CartRepository extends MainRepository<Cart>{
 
         this.overrideData(carts);
     }
-
 
     public void deleteCartById(UUID cartId) {
         ArrayList<Cart> carts = this.findAll();
