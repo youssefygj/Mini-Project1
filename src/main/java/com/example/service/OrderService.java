@@ -19,7 +19,15 @@ public class OrderService extends MainService<Order>{
         _orderRepository = orderRepository;
     }
 
-    public void addOrder(Order order) {
+    public void addOrder(Order order) throws IllegalArgumentException  {
+        if (order == null){
+            throw new IllegalArgumentException("Order is null");
+        }
+
+        if (_orderRepository.getOrderById(order.getId()) != null){
+            throw new IllegalArgumentException("Order already exists");
+        }
+
         _orderRepository.addOrder(order);
     }
 
@@ -27,14 +35,27 @@ public class OrderService extends MainService<Order>{
         return _orderRepository.getOrders();
     }
 
-    public Order getOrderById(UUID id) {
+    public Order getOrderById(UUID id) throws IllegalArgumentException  {
+        if (id == null) {
+            throw new IllegalArgumentException("Id cannot be null");
+        }
+
+        if (_orderRepository.getOrderById(id) == null) {
+            throw new IllegalArgumentException("Invalid order id");
+        }
+
         return _orderRepository.getOrderById(id);
     }
 
     public void deleteOrderById(UUID id) throws IllegalArgumentException {
+        if (id == null) {
+            throw new IllegalArgumentException("Id cannot be null");
+        }
+
         if (_orderRepository.getOrderById(id) == null) {
             throw new IllegalArgumentException("Invalid order id");
         }
+
         _orderRepository.deleteOrderById(id);
     }
 }
