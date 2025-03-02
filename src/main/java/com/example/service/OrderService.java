@@ -16,7 +16,7 @@ public class OrderService extends MainService<Order>{
 
     @Autowired
     public OrderService(OrderRepository orderRepository) {
-        _orderRepository = orderRepository;
+        this._orderRepository = orderRepository;
     }
 
     public void addOrder(Order order) throws IllegalArgumentException  {

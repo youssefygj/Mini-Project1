@@ -18,4 +18,10 @@ public class Order {
     private UUID userId;
     private double totalPrice;
     private List<Product> products = new ArrayList<>();
+
+    public Order(UUID userId,double totalPrice) {
+        this.userId = userId;
+        this.totalPrice = totalPrice;
+    }
+
 }
