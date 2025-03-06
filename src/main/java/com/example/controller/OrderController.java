@@ -38,8 +38,8 @@ public class OrderController {
             _orderService.deleteOrderById(orderId);
         }
         catch (Exception e){
-            return "Please provide a valid orderId";
+            return "Order not found";
         }
-        return "Order deleted";
+        return "Order deleted successfully";
     }
 }
