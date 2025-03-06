@@ -81,13 +81,19 @@ public class UserController {
 
         Product product = productService.getProductById(productId);
         User user = userService.getUserById(userId);
-        Cart cart = cartService.getCartByUserId(userId);
-        if(cart == null){
+        Cart cart;
+        try {
+            cart = cartService.getCartByUserId(userId);
+        }
+        catch (Exception e){
             cart = new Cart(UUID.randomUUID(), userId, new ArrayList<Product>());
         }
-        cartService.addCart(cart);
-        cartService.addProductToCart(cart.getId(), product);
-
+        try {
+            cartService.addCart(cart);
+            cartService.addProductToCart(cart.getId(), product);
+        }catch (Exception e){
+            return e.getMessage();
+        }
         return "Product added to cart";
     }
 
@@ -96,16 +102,18 @@ public class UserController {
 
         Product product = productService.getProductById(productId);
         User user = userService.getUserById(userId);
-        Cart cart = cartService.getCartByUserId(user.getId());
-        if(cart != null){
-            cartService.deleteProductFromCart(cart.getId(), product);
-            return "Product deleted from cart";
-        }
-        else{
+        Cart cart;
+        try{
+            cart = cartService.getCartByUserId(user.getId());
+        }catch (Exception e){
             return "Cart is empty";
         }
-
-
+        try {
+            cartService.deleteProductFromCart(cart.getId(), product);
+        }catch (Exception e){
+            return e.getMessage();
+        }
+        return "Product deleted from cart";
     }
 
     @DeleteMapping("/delete/{userId}")
