@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.model.Cart;
 import com.example.model.Order;
 import com.example.model.Product;
 import com.example.model.User;
@@ -56,7 +57,7 @@ public class UserController {
 
         userService.addOrderToUser(userId);
 
-        return "Order Added Successfully";
+        return "Order added successfully";
     }
 
     @PostMapping("/{userId}/removeOrder")
@@ -64,7 +65,7 @@ public class UserController {
 
         userService.removeOrderFromUser(userId, orderId);
 
-        return "Order Removed Successfully";
+        return "Order removed successfully";
     }
 
     @DeleteMapping("/{userId}/emptyCart")
@@ -72,7 +73,7 @@ public class UserController {
 
         userService.emptyCart(userId);
 
-        return "Cart Emptied Successfully";
+        return "Cart emptied successfully";
     }
 
     @PutMapping("/addProductToCart")
@@ -80,9 +81,14 @@ public class UserController {
 
         Product product = productService.getProductById(productId);
         User user = userService.getUserById(userId);
-        cartService.addProductToCart(user.getId(), product);
+        Cart cart = cartService.getCartByUserId(userId);
+        if(cart == null){
+            cart = new Cart(UUID.randomUUID(), userId, new ArrayList<Product>());
+        }
+        cartService.addCart(cart);
+        cartService.addProductToCart(cart.getId(), product);
 
-        return "Product Added to Cart Successfully";
+        return "Product added to cart";
     }
 
     @PutMapping("/deleteProductFromCart")
@@ -90,16 +96,30 @@ public class UserController {
 
         Product product = productService.getProductById(productId);
         User user = userService.getUserById(userId);
-        cartService.deleteProductFromCart(user.getId(), product);
+        Cart cart = cartService.getCartByUserId(user.getId());
+        if(cart != null){
+            cartService.deleteProductFromCart(cart.getId(), product);
+            return "Product deleted from cart";
+        }
+        else{
+            return "Cart is empty";
+        }
 
-        return "Product Deleted from Cart Successfully";
+
     }
 
     @DeleteMapping("/delete/{userId}")
     public String deleteUserById(@PathVariable UUID userId) {
+        try{
+            User user = userService.getUserById(userId);
+        }
+        catch (ResourceNotFoundException e){
+            return "User not found";
+        }
+
         userService.deleteUserById(userId);
 
-        return "User Deleted Successfully";
+        return "User deleted successfully";
     }
 
 }

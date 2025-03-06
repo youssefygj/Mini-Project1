@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("rawtypes")
 public class OrderRepository extends MainRepository<Order>{
 
-    @Value("${spring.application.cartDataPath}")
+    @Value("${spring.application.orderDataPath}")
     private String dataPath;
 
     @Override

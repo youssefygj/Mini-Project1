@@ -56,10 +56,14 @@ public class UserRepository extends MainRepository<User> {
     }
 
     public void removeOrderFromUser(UUID userId, UUID orderId) {
-        User user = getUserById(userId);
+        ArrayList<User> users = getUsers();
+        User user = users.stream()
+                .filter(u -> u.getId().equals(userId))
+                .findFirst()
+                .orElse(null);
 
         user.getOrders().removeIf(order -> order.getId().equals(orderId));
-        save(user);
+        overrideData(users);
     }
 
     public void deleteUserById(UUID userId) {

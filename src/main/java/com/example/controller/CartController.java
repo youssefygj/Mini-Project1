@@ -52,7 +52,7 @@ public class CartController {
     public String deleteCartById(@PathVariable UUID cartId) {
         try {
             cartService.deleteCartById(cartId);
-            return "Product added to cart successfully";
+            return "Cart deleted successfully";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
