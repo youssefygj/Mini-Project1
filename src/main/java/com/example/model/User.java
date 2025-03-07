@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Data
@@ -18,12 +19,37 @@ public class User {
     private String name;
     private List<Order> orders = new ArrayList<>();
 
-    public User(String name, List<Order> orders) {
+    public User(String name) {
+        this.id = UUID.randomUUID();
         this.name = name;
-        this.orders = orders;
+    }
+
+    public User(UUID id,String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        User user = (User) obj;
+
+        if (!Objects.equals(id, user.id) || !Objects.equals(name, user.name)) {
+            return false;
+        }
+
+        if (orders.size() != user.orders.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < orders.size(); i++) {
+            if (!orders.get(i).equals(user.orders.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
-
-
-
-
