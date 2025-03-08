@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.model.Cart;
 import com.example.model.Order;
 import com.example.model.Product;
 import com.example.model.User;
@@ -79,8 +80,9 @@ public class UserController {
     public String addProductToCart(@RequestParam UUID userId, @RequestParam UUID productId) {
 
         Product product = productService.getProductById(productId);
-        User user = userService.getUserById(userId);
-        cartService.addProductToCart(user.getId(), product);
+        Cart cart = cartService.getCartByUserId(userId);
+
+        cartService.addProductToCart(cart.getId(), product);
 
         return "Product Added to Cart Successfully";
     }
