@@ -40,7 +40,7 @@ public class OrderRepository extends MainRepository<Order>{
     }
     public void deleteOrderById(UUID orderId) {
         ArrayList<Order> orders = getOrders();
-        List<Order> filteredOrder= orders.stream().filter(order -> ! order.getId().equals(orderId)).collect(Collectors.toList());
+        List<Order> filteredOrder= orders.stream().filter(order -> ! (order.getId().equals(orderId))).collect(Collectors.toList());
         overrideData((ArrayList<Order>) filteredOrder);
     }
 }
