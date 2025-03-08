@@ -3,6 +3,7 @@ package com.example.repository;
 import com.example.model.Cart;
 import com.example.model.Product;
 import com.fasterxml.jackson.core.type.TypeReference;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
 
+@Slf4j
 @Repository
 @SuppressWarnings("rawtypes")
 public class CartRepository extends MainRepository<Cart>{
@@ -74,11 +76,12 @@ public class CartRepository extends MainRepository<Cart>{
 
     public void deleteProductFromCart(UUID cartId, Product product) {
         ArrayList<Cart> carts = this.findAll();
+        log.info(carts.toString());
         Cart cart = Objects.requireNonNull(carts.stream()
                 .filter(c -> c.getId().equals(cartId))
                 .findFirst().orElse(null));
         cart.getProducts().remove(product);
-
+        log.info(carts.toString());
         this.overrideData(carts);
     }
 
