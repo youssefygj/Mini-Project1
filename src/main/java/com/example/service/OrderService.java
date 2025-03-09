@@ -48,17 +48,19 @@ public class OrderService extends MainService<Order>{
             throw new IllegalArgumentException("Order already exists");
         }
 
-        order.getProducts().forEach(p -> { if(_productRepository.getProductById(p.getId()) == null){
-            throw new IllegalArgumentException("Product does not exist");
-        }});
+//        order.getProducts().forEach(p -> { if(_productRepository.getProductById(p.getId()) == null){
+//            throw new IllegalArgumentException("Product does not exist");
+//        }});
 
         User associatedUser = _userRepository.getUserById(order.getUserId());
 
-        if(associatedUser == null){
-            throw new IllegalArgumentException("User does not exist");
-        }
+//        if(associatedUser == null){
+//            throw new IllegalArgumentException("User does not exist");
+//        }
 
-        _userRepository.addOrderToUser(order.getUserId(), order);
+        if(associatedUser!=null) {
+            _userRepository.addOrderToUser(order.getUserId(), order);
+        }
         _orderRepository.addOrder(order);
     }
 

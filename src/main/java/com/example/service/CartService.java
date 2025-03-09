@@ -66,9 +66,9 @@ public class CartService extends MainService<Cart> {
             throw new ResourceNotFoundException("User ID is null");
         }
         Cart cart = cartRepository.getCartByUserId(userId);
-        if(cart == null) {
-            throw new ResourceNotFoundException("No Carts found, Likely User doesn't exist");
-        }
+//        if(cart == null) {
+//            throw new ResourceNotFoundException("No Carts found, Likely User doesn't exist");
+//        }
         return cart;
     }
 

@@ -58,6 +58,8 @@ public class UserService extends MainService<User> {
 
         Order newOrder = new Order();
 
+        newOrder.setId(UUID.randomUUID());
+
         Cart cart = cartService.getCartByUserId(userId);
         if (cart == null) throw new ResourceNotFoundException("Cart not found, likely User doesn't exist");
         if(cart.getProducts().isEmpty()) throw new ResourceNotFoundException("Cart is empty");
@@ -106,15 +108,17 @@ public class UserService extends MainService<User> {
     }
 
     public void deleteUserById(UUID userId) {
+        log.info("starting deleting by id");
         if (userId == null) throw new ResourceNotFoundException("User id is null");
 
+        log.info("getting user from DB");
         User user = userRepository.getUserById(userId);
         if (user == null) throw new ResourceNotFoundException("User not found");
-
+        log.info("getting cart from DB");
         Cart cart = cartService.getCartByUserId(userId);
         if(cart != null)
             cartService.deleteCartById(cart.getId());
-
+        log.info("getting orders from DB");
         List<Order> orders = userRepository.getOrdersByUserId(userId);
         if(!orders.isEmpty()) {
             for (Order order : orders) {
@@ -123,6 +127,7 @@ public class UserService extends MainService<User> {
         }
 
         userRepository.deleteUserById(userId);
+        log.info("user deleted from DB");
     }
 
 }
