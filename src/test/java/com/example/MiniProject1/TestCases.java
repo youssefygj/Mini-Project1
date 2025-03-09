@@ -654,7 +654,7 @@ public class TestCases {
         productService.addProduct(expectedProduct);
 
         // Assert
-        Product actualProduct = (Product) find(Model.USER, expectedProduct);
+        Product actualProduct = (Product) find(Model.PRODUCT, expectedProduct);
         assertNotNull(actualProduct);
     }
 
@@ -823,7 +823,7 @@ public class TestCases {
         assertEquals(product.getPrice() * (100 - discount) * 0.01 , actualProduct.getPrice());
 
         Cart actualCart = (Cart) find(Model.CART, cart);
-        assertEquals(actualProduct.getPrice(), actualCart.getProducts().getFirst().getName());
+        assertEquals(actualProduct.getPrice(), actualCart.getProducts().getFirst().getPrice());
 
         Order actualOrder = (Order) find(Model.ORDER, order);
         assertEquals(order, actualOrder);

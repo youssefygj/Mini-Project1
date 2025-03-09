@@ -9,10 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Repository
 @SuppressWarnings("rawtypes")
@@ -86,6 +83,17 @@ public class CartRepository extends MainRepository<Cart>{
         ArrayList<Cart> carts = this.findAll();
         carts.removeIf(cart -> cart.getId().equals(cartId));
         this.overrideData(carts);
+    }
+
+    public void updateProductsInCart(UUID cartId, List<Product> products) {
+        ArrayList<Cart> carts = this.findAll();
+        ArrayList<Cart> updatedCarts = new ArrayList<Cart>(carts.stream()
+                .peek(c -> {
+                    if ( c.getId().equals(cartId)) {
+                        c.setProducts(products);
+                    }
+                }).toList());
+        this.overrideData(updatedCarts);
     }
 
 }
