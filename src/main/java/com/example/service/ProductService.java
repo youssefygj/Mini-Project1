@@ -25,6 +25,15 @@ public class ProductService extends MainService<Product> {
             if (product == null) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product cannot be null");
             }
+            if (product.getName() == null){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product name cannot be null");
+            }
+            if (product.getId() == null){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product ID cannot be null");
+            }
+            if (product.getPrice() < 0){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product price cannot be negative");
+            }
             if (product.getId() != null && this.productRepository.getProductById(product.getId()) != null) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Product already exists");
             }
