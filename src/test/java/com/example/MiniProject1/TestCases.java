@@ -960,7 +960,7 @@ public class TestCases {
         ArrayList<Cart> actualCarts = cartService.getCarts();
 
         // Assert
-        assertEquals(expectedCart.getId(), actualCarts.getFirst().getUserId());
+        assertEquals(expectedCart.getId(), actualCarts.getFirst().getId());
     }
 
     @Test

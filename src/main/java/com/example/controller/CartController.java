@@ -12,7 +12,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/cart")
 public class CartController {
-    CartService cartService;
+    private final CartService cartService;
     @Autowired
 
     public CartController(CartService cartService) {
@@ -43,7 +43,7 @@ public class CartController {
             cartService.addProductToCart(cartId, product);
             return "Product added to cart successfully";
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return "Cart or Product not found";
         }
     }
 
@@ -54,7 +54,7 @@ public class CartController {
             cartService.deleteCartById(cartId);
             return "Cart deleted successfully";
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return "Cart not found";
         }
     }
 
