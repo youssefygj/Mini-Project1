@@ -6,6 +6,7 @@ import com.example.model.Product;
 import com.example.model.User;
 import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserService extends MainService<User> {
@@ -22,6 +24,9 @@ public class UserService extends MainService<User> {
     private final OrderService orderService;
 
     public User addUser(User user) {
+        if(user == null || user.getId() == null) throw new IllegalArgumentException("User is null");
+        if(userRepository.getUserById(user.getId()) != null) throw new IllegalArgumentException("User already exists");
+
         userRepository.save(user);
         return user;
     }
@@ -49,10 +54,13 @@ public class UserService extends MainService<User> {
 
     public void addOrderToUser(UUID userId) {
         if (userId == null) throw new ResourceNotFoundException("User id is null");
+        if(userRepository.getUserById(userId) == null) throw new ResourceNotFoundException("User not found");
 
         Order newOrder = new Order();
+
         Cart cart = cartService.getCartByUserId(userId);
         if (cart == null) throw new ResourceNotFoundException("Cart not found, likely User doesn't exist");
+        if(cart.getProducts().isEmpty()) throw new ResourceNotFoundException("Cart is empty");
 
         for(Product product : cart.getProducts()){
             newOrder.setTotalPrice(newOrder.getTotalPrice() + product.getPrice());
@@ -60,8 +68,9 @@ public class UserService extends MainService<User> {
             cartService.deleteProductFromCart(cart.getId(), product);
         }
 
-        userRepository.addOrderToUser(userId, newOrder);
+        newOrder.setUserId(userId);
         orderService.addOrder(newOrder);
+        userRepository.addOrderToUser(userId, newOrder);
     }
 
     public void emptyCart(UUID userId) {
@@ -78,18 +87,40 @@ public class UserService extends MainService<User> {
 
     public void removeOrderFromUser(UUID userId, UUID orderId) {
         if (userId == null) throw new ResourceNotFoundException("order id is null");
-
         if (orderId == null) throw new ResourceNotFoundException("User id is null");
 
-        if (userRepository.getUserById(userId) == null) throw new ResourceNotFoundException("User not found");
+        User user = userRepository.getUserById(userId);
+        if (user == null) throw new ResourceNotFoundException("User not found");
 
+        Cart cart = cartService.getCartByUserId(userId);
+        Order userOrder = orderService.getOrderById(orderId);
+        if(userOrder == null) throw new ResourceNotFoundException("Order not found");
+        if(cart != null)
+            for (Product product : userOrder.getProducts()) {
+                cartService.deleteProductFromCart(cart.getId(), product);
+            }
+
+        orderService.deleteOrderById(orderId);
         userRepository.removeOrderFromUser(userId, orderId);
+
     }
 
     public void deleteUserById(UUID userId) {
         if (userId == null) throw new ResourceNotFoundException("User id is null");
 
-        if (userRepository.getUserById(userId) == null) throw new ResourceNotFoundException("User not found");
+        User user = userRepository.getUserById(userId);
+        if (user == null) throw new ResourceNotFoundException("User not found");
+
+        Cart cart = cartService.getCartByUserId(userId);
+        if(cart != null)
+            cartService.deleteCartById(cart.getId());
+
+        List<Order> orders = userRepository.getOrdersByUserId(userId);
+        if(!orders.isEmpty()) {
+            for (Order order : orders) {
+                orderService.deleteOrderById(order.getId());
+            }
+        }
 
         userRepository.deleteUserById(userId);
     }

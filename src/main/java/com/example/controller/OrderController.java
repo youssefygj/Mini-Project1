@@ -38,6 +38,7 @@ public class OrderController {
             _orderService.deleteOrderById(orderId);
         }
         catch (Exception e){
+            System.out.println(e.getMessage());
             return "Order not found";
         }
         return "Order deleted successfully";
