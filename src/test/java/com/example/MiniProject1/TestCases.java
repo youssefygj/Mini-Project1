@@ -398,7 +398,7 @@ public class TestCases {
         ArrayList<Order> actualOrders = getOrders();
         assertFalse(actualOrders.isEmpty());
         assertEquals(user.getId(), actualOrders.getFirst().getUserId());
-        assertEquals(n, products.getFirst().getPrice());
+        assertEquals(n, actualOrders.getFirst().getTotalPrice());
         for(int i = 0; i < n; i++){
             assertEquals(products.get(i).getId(), actualOrders.getFirst().getProducts().get(i).getId());
         }
@@ -479,6 +479,7 @@ public class TestCases {
         addUser(user);
 
         Cart expectedCart = new Cart(user.getId());
+        addCart(expectedCart);
 
         // Act
         userService.emptyCart(user.getId());
