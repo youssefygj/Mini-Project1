@@ -62,8 +62,8 @@ public class ProductService extends MainService<Product> {
     }
 
     public Product updateProduct(UUID productId, String newName, double newPrice) {
-        if (productId == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product id cannot be null");
+        if (productId == null || newName == null || newPrice < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid parameters");
         }
         Product product = this.productRepository.getProductById(productId);
         if (product == null) {
