@@ -2,11 +2,13 @@ package com.example.repository;
 
 import com.example.model.Order;
 import com.example.model.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+@Slf4j
 @Repository
 public class UserRepository extends MainRepository<User> {
     @Value("${spring.application.userDataPath}")
@@ -60,6 +62,9 @@ public class UserRepository extends MainRepository<User> {
         users.add(user);
 
         overrideData(users);
+
+        user = getUserById(userId);
+        log.info(user.getOrders().size()+"");
     }
 
     public void removeOrderFromUser(UUID userId, UUID orderId) {
