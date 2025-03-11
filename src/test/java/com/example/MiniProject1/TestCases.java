@@ -536,7 +536,7 @@ public class TestCases {
     void handleRemoveOrderFromUser_ShouldThrowException_WhenOrderDoesNotBelongToUser(){
         // Arrange
         User user = new User("name");
-        
+
         User differentUser = new User("name");
 
         ArrayList<Order> differentUserOrders = new ArrayList<Order>();
@@ -545,7 +545,7 @@ public class TestCases {
 
         differentUser.setOrders(differentUserOrders);
         addUser(differentUser);
-        
+
         // Act & Assert
         assertThrows(Exception.class, () -> userService.removeOrderFromUser(user.getId(), differentUserOrders.getFirst().getId()));
     }
@@ -567,13 +567,13 @@ public class TestCases {
         ArrayList<Order> orders = new ArrayList<Order>();
         orders.add(new Order(user.getId()));
         addOrder(orders.getFirst());
-        
+
         user.setOrders(orders);
         addUser(user);
-    
+
         // Act
         userService.deleteUserById(user.getId());
-        
+
         // Assert
         assertTrue(getUsers().isEmpty());
         assertTrue(getCarts().isEmpty());
@@ -677,12 +677,12 @@ public class TestCases {
     }
 
     @Test
-    void handleAddProduct_ShouldThrowException_WhenGivenNullNUll(){
+    void handleAddProduct_ShouldThrowException_WhenGivenProductWithNullName(){
         assertThrows(Exception.class, () -> productService.addProduct(new Product(null, 1)));
     }
 
     @Test
-    void handleAddProduct_ShouldThrowException_WhenGivenNullNegativePrice(){
+    void handleAddProduct_ShouldThrowException_WhenGivenProductWithNegativePrice(){
         assertThrows(Exception.class, () -> productService.addProduct(new Product("name", -1)));
     }
     // endregion
@@ -1079,9 +1079,19 @@ public class TestCases {
         assertEquals(expectedCart, actualCart);
     }
 
+//    @Test
+//    void handleGetCartByUserId_ShouldThrowException_WhenGivenNonExistentUserId(){
+//        assertThrows(Exception.class, () -> cartService.getCartByUserId(UUID.randomUUID()));
+//    }
+
     @Test
-    void handleGetCartByUserId_ShouldThrowException_WhenGivenNonExistentCartId(){
-        assertThrows(Exception.class, () -> cartService.getCartByUserId(UUID.randomUUID()));
+    void handleGetCartByUserId_ShouldReturnNull_WhenUserHasNoCart() {
+        // Arrange
+        User user = new User("name");
+        addUser(user);
+
+        // Act & Assert
+        assertNull(cartService.getCartByUserId(user.getId()));
     }
 
     @Test

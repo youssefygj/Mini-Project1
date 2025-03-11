@@ -39,7 +39,7 @@ public class CartService extends MainService<Cart> {
         return cartRepository.addCart(cart);
     }
 
-    
+
     public ArrayList<Cart> getCarts() {
         ArrayList<Cart> carts = cartRepository.getCarts();
         if(carts == null) {
@@ -48,7 +48,7 @@ public class CartService extends MainService<Cart> {
         return carts;
     }
 
-   
+
     public Cart getCartById(UUID cartId) {
         if (cartId == null) {
             throw new ResourceNotFoundException("Cart ID is null");
@@ -60,7 +60,7 @@ public class CartService extends MainService<Cart> {
         return cart;
     }
 
-   
+
     public Cart getCartByUserId(UUID userId) {
         if (userId == null) {
             throw new ResourceNotFoundException("User ID is null");
@@ -72,7 +72,7 @@ public class CartService extends MainService<Cart> {
         return cart;
     }
 
-   
+
     public void addProductToCart(UUID cartId, Product product) {
         if (cartId == null) {
             throw new ResourceNotFoundException("Cart ID is null");
@@ -82,7 +82,7 @@ public class CartService extends MainService<Cart> {
         cartRepository.addProductToCart(cartId, product);
     }
 
-    
+
     public void deleteProductFromCart(UUID cartId, Product product) {
         if (cartId == null) {
             throw new ResourceNotFoundException("Cart ID is null");
